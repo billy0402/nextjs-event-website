@@ -19,19 +19,3 @@ export const CommonSchema = z.object({
   updatedAt: z.date(),
 });
 export type Common = z.infer<typeof CommonSchema>;
-
-export const PaginationMetaSchema = z.object({
-  count: z.number(),
-  page: z.number(),
-  limit: z.number(),
-  first: z.number(),
-  last: z.number(),
-});
-export type PaginationMeta = z.infer<typeof PaginationMetaSchema>;
-
-export function createPaginationMetaSchema<T extends z.ZodType>(schema: T) {
-  return z.object({
-    data: z.array(schema),
-    meta: PaginationMetaSchema,
-  });
-}

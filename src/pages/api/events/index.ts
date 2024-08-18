@@ -1,7 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { z } from 'zod';
-
 import prisma from '@/db';
 import { roleGuard, validationGuard } from '@/helpers/api-guard';
 import withServerError from '@/helpers/error-handler';
@@ -16,7 +14,7 @@ async function handler(
   switch (req.method) {
     case 'GET': {
       const events = await prisma.event.findMany();
-      const response = z.array(EventOutSchema).parse(events);
+      const response = EventOutSchema.array().parse(events);
       return res.status(200).json(response);
     }
     case 'POST': {

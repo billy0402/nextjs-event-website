@@ -17,14 +17,14 @@ import {
   Tr,
 } from '@chakra-ui/react';
 
-import { useReservationList } from '@/queries/reservations';
+import { useEventReservationList } from '@/queries/events';
 
 const ReservationListPage: NextPage = () => {
   const router = useRouter();
 
   const { id } = router.query as { id: string };
 
-  const { data: reservations } = useReservationList({ eventId: id });
+  const { data: eventReservations } = useEventReservationList(id);
 
   return (
     <Box p={5}>
@@ -44,8 +44,8 @@ const ReservationListPage: NextPage = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {reservations?.length ? (
-              reservations.map((reservation) => (
+            {eventReservations?.reservations.length ? (
+              eventReservations.reservations.map((reservation) => (
                 <Tr key={reservation.id}>
                   <Td>{reservation?.user.name}</Td>
                 </Tr>

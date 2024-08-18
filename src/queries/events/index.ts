@@ -8,6 +8,7 @@ import {
   apiEventDestroy,
   apiEventList,
   apiEventPartUpdate,
+  apiEventReservationList,
   apiEventRetrieve,
   apiEventUpdate,
 } from '@/services/events';
@@ -16,8 +17,7 @@ const moduleName = ApiModule.EVENTS;
 const queryKeys = {
   list: () => [moduleName, 'list'] as const,
   retrieve: (id: string) => [moduleName, 'retrieve', id] as const,
-  reservations: (eventId: string) =>
-    [moduleName, 'reservations', eventId] as const,
+  reservations: (id: string) => [moduleName, 'reservations', id] as const,
 };
 
 export const useEventList = () => {
@@ -68,5 +68,13 @@ export const useEventDestroy = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.list() });
     },
+  });
+};
+
+export const useEventReservationList = (id: string) => {
+  return useQuery({
+    queryKey: queryKeys.reservations(id),
+    queryFn: () => apiEventReservationList(id),
+    enabled: !!id,
   });
 };

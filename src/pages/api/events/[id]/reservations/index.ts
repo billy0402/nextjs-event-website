@@ -9,17 +9,20 @@ import { EventReservationOutSchema } from '@/schema/event-reservation';
 
 async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<EventReservationOut[] | ApiError>,
+  res: NextApiResponse<EventReservationOut | ApiError>,
 ) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ message: 'Method Not Allowed' });
-  }
+  const { id } = req.query as { id: string };
 
   switch (req.method) {
     case 'GET': {
       if (!roleGuard('ADMIN', req, res)) return undefined;
 
-      const events = await prisma.event.findMany({
+      const event = await prisma.event.findUnique({ where: { id } });
+      if (!event) {
+        return res.status(404).json({ message: 'Event not found' });
+      }
+
+      const eventReservations = await prisma.event.findUnique({
         include: {
           reservations: {
             include: {
@@ -27,8 +30,9 @@ async function handler(
             },
           },
         },
+        where: { id },
       });
-      const response = EventReservationOutSchema.array().parse(events);
+      const response = EventReservationOutSchema.parse(eventReservations);
       return res.status(200).json(response);
     }
     default:

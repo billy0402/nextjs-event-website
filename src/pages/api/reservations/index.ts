@@ -1,7 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { z } from 'zod';
-
 import { Role } from '@prisma/client';
 
 import prisma from '@/db';
@@ -32,7 +30,7 @@ async function handler(
             ? { eventId }
             : { userId: tokenData.userId },
       });
-      const response = z.array(ReservationOutSchema).parse(reservations);
+      const response = ReservationOutSchema.array().parse(reservations);
       return res.status(200).json(response);
     }
     case 'POST': {

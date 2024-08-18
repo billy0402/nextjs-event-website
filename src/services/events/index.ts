@@ -1,4 +1,5 @@
 import type { EventIn, EventOut } from '@/schema/event';
+import { EventReservationOut } from '@/schema/event-reservation';
 import instance from '@/services/instance';
 
 export async function apiEventList() {
@@ -28,5 +29,12 @@ export async function apiEventPartUpdate(id: string, data: Partial<EventIn>) {
 
 export async function apiEventDestroy(id: string) {
   const response = await instance.delete<null>(`/events/${id}`);
+  return response.data;
+}
+
+export async function apiEventReservationList(id: string) {
+  const response = await instance.get<EventReservationOut>(
+    `/events/${id}/reservations`,
+  );
   return response.data;
 }
