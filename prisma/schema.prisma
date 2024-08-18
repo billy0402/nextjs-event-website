@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// 使用者
+model User {
+  /// ID
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  /// 電子郵件（唯一）
+  email        String        @unique
+  /// 密碼
+  password     String
+  /// 姓名
+  name         String
+  /// 角色
+  role         Role          @default(USER)
+  /// 註冊時間
+  createdAt    DateTime      @default(now())
+  /// 更新時間
+  updatedAt    DateTime      @updatedAt
+  /// 預約列表
+  reservations Reservation[]
+}
+
+// 角色
+enum Role {
+  USER
+  ADMIN
+}
+
+// 活動
+model Event {
+  /// ID
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  /// 標題
+  title        String
+  /// 描述
+  description  String?
+  /// 日期和時間
+  date         DateTime
+  /// 地點
+  location     String?
+  /// 是否啟用
+  isActive     Boolean       @default(true)
+  /// 創建時間
+  createdAt    DateTime      @default(now())
+  /// 更新時間
+  updatedAt    DateTime      @updatedAt
+  /// 預約列表
+  reservations Reservation[]
+}
+
+// 預約
+model Reservation {
+  /// ID
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  /// 用戶 ID
+  userId    String   @db.ObjectId
+  /// 活動 ID
+  eventId   String   @db.ObjectId
+  /// 創建時間
+  createdAt DateTime @default(now())
+  /// 更新時間
+  updatedAt DateTime @updatedAt
+  /// 用戶關聯
+  user      User     @relation(fields: [userId], references: [id])
+  /// 活動關聯
+  event     Event    @relation(fields: [eventId], references: [id])
+
+  /// 使用者不會重複預約活動
+  @@unique([userId, eventId], name: "user_event_unique")
+}
+
+// 最新消息
+model News {
+  /// ID
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  /// 標題
+  title       String
+  /// 內容
+  content     String
+  /// 發布日期
+  publishedAt DateTime @default(now())
+  /// 是否啟用
+  isActive    Boolean  @default(true)
+  /// 創建時間
+  createdAt   DateTime @default(now())
+  /// 更新時間
+  updatedAt   DateTime @updatedAt
+}
