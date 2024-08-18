@@ -27,9 +27,9 @@ const EventListPage: NextPage = () => {
         <Heading as='h2' size='lg'>
           Events
         </Heading>
-        <Button>
-          <Link href='/admin/events/create'>Create</Link>
-        </Button>
+        <Link href='/admin/events/create'>
+          <Button>Create</Button>
+        </Link>
       </Flex>
       <TableContainer>
         <Table variant='simple'>
@@ -49,14 +49,13 @@ const EventListPage: NextPage = () => {
                   <Td>{new Date(event.date).toLocaleDateString()}</Td>
                   <Td>{event.isActive ? '是' : '否'}</Td>
                   <Td>
-                    <Button>
-                      <Link href={`/admin/events/${event.id}`}>Edit</Link>
-                    </Button>
-                    <Button ml={5}>
-                      <Link href={`/admin/events/${event.id}/reservations`}>
-                        View Reservations
-                      </Link>
-                    </Button>
+                    <Link href={`/admin/events/${event.id}`}>
+                      <Button>Edit</Button>
+                    </Link>
+
+                    <Link href={`/admin/events/${event.id}/reservations`}>
+                      <Button ml={5}>View Reservations</Button>
+                    </Link>
                   </Td>
                 </Tr>
               ))

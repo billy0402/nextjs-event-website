@@ -97,9 +97,9 @@ const EventEditPage: NextPage = () => {
         <Heading as='h2' size='lg'>
           Events
         </Heading>
-        <Button>
-          <Link href='/admin/events'>Back to List</Link>
-        </Button>
+        <Link href='/admin/events'>
+          <Button>Back to List</Button>
+        </Link>
       </Flex>
       <form onSubmit={handleSubmit(onSubmit)}>
         {fieldConfigs.map((config) => (
