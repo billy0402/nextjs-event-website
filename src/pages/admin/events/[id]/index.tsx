@@ -46,6 +46,7 @@ const fieldConfigs: FieldConfig[] = [
     label: 'Active',
     type: 'select',
     required: false,
+    defaultValue: true,
     options: [
       { value: true, label: 'Yes' },
       { value: false, label: 'No' },
