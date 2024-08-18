@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { ApiModule } from '@/enums/api-module';
-import { getToken, getTokenData, removeToken, setToken } from '@/helpers/token';
+import { getToken, getTokenData, setToken } from '@/helpers/token';
 import { queryClient } from '@/queries/client';
 import type { TokenData } from '@/schema/auth';
 import {
@@ -28,11 +28,6 @@ export const useAuthLogin = (
       onSuccess(tokenData);
     },
   });
-};
-
-export const cleanUpToken = () => {
-  queryClient.invalidateQueries({ queryKey: queryKeys.user() });
-  removeToken();
 };
 
 export const useAuthRefresh = () => {
