@@ -5,7 +5,7 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 
 import { Link } from '@chakra-ui/next-js';
-import { Box, Button, Flex, Heading } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, useToast } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 
 import type { FieldConfig } from '@/components/Field';
@@ -55,6 +55,7 @@ const fieldConfigs: FieldConfig[] = [
 
 const EventEditPage: NextPage = () => {
   const router = useRouter();
+  const toast = useToast();
 
   const { id } = router.query as { id: string };
   const isCreate = id === 'create';
@@ -91,6 +92,22 @@ const EventEditPage: NextPage = () => {
     });
   }, [event, reset]);
 
+  useEffect(() => {
+    if (!createEvent.isSuccess) return;
+    toast({
+      status: 'success',
+      title: '新增成功',
+    });
+  }, [createEvent.isSuccess, toast]);
+
+  useEffect(() => {
+    if (!updateEvent.isSuccess) return;
+    toast({
+      status: 'success',
+      title: '修改成功',
+    });
+  }, [updateEvent.isSuccess, toast]);
+
   return (
     <Box p={5}>
       <Flex alignItems='center' justifyContent='space-between' mb={20} mt={5}>
@@ -101,7 +118,13 @@ const EventEditPage: NextPage = () => {
           <Button>Back to List</Button>
         </Link>
       </Flex>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <Flex
+        as='form'
+        flexDirection='column'
+        alignItems='flex-start'
+        gap={5}
+        onSubmit={handleSubmit(onSubmit)}
+      >
         {fieldConfigs.map((config) => (
           <Field
             key={config.name}
@@ -113,7 +136,7 @@ const EventEditPage: NextPage = () => {
         <Button colorScheme='blue' mt={5} type='submit'>
           {isCreate ? 'Create' : 'Update'}
         </Button>
-      </form>
+      </Flex>
     </Box>
   );
 };
