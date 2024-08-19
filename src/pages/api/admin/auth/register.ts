@@ -4,7 +4,7 @@ import { hash } from 'bcryptjs';
 
 import prisma from '@/db';
 import { validationGuard } from '@/helpers/api-guard';
-import withServerError from '@/helpers/error-handler';
+import { withServerError } from '@/helpers/handler-wrapper';
 import type { ApiError } from '@/models/error';
 import type { UserInfo } from '@/schema/auth';
 import { RegisterInSchema, UserInfoSchema } from '@/schema/auth';

@@ -2,7 +2,7 @@ import util from 'util';
 
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 
-function withServerError(handler: NextApiHandler): NextApiHandler {
+export function withServerError(handler: NextApiHandler): NextApiHandler {
   return async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       await handler(req, res);
@@ -16,5 +16,3 @@ function withServerError(handler: NextApiHandler): NextApiHandler {
     }
   };
 }
-
-export default withServerError;

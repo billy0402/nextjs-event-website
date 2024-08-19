@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 
 import env from '@/fixtures/env';
 import { validationGuard } from '@/helpers/api-guard';
-import withServerError from '@/helpers/error-handler';
+import { withServerError } from '@/helpers/handler-wrapper';
 import type { ApiError } from '@/models/error';
 import type { TokenData, TokenPayload } from '@/schema/auth';
 import {

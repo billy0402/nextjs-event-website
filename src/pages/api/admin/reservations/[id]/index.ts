@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from '@prisma/client';
 
 import { authGuard } from '@/helpers/api-guard';
-import withServerError from '@/helpers/error-handler';
+import { withServerError } from '@/helpers/handler-wrapper';
 import type { ApiError } from '@/models/error';
 import type { ReservationOut } from '@/schema/reservation';
 import { ReservationOutSchema } from '@/schema/reservation';
