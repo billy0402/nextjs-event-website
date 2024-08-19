@@ -90,6 +90,12 @@ model News {
   title       String
   /// 內容
   content     String
+  /// 圖片
+  image       String?
+  /// Facebook 連結
+  fbLink      String?
+  /// 觀看次數
+  views       Int      @default(0)
   /// 發布日期
   publishedAt DateTime @default(now())
   /// 是否啟用

@@ -8,9 +8,9 @@ import {
 
 export const EventInSchema = z.object({
   title: RequiredStringSchema,
-  description: z.string().optional().nullable(),
+  description: z.string().nullish().default(null),
   date: z.string().datetime(),
-  location: z.string().optional().nullable(),
+  location: z.string().nullish().default(null),
   isActive: BooleanSchema.optional(),
 });
 export type EventIn = z.infer<typeof EventInSchema>;
