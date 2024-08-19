@@ -13,11 +13,11 @@ import {
 } from '@chakra-ui/react';
 
 import { removeToken } from '@/helpers/token';
-import { useAuthMe } from '@/queries/auth';
+import { useAdminAuthMe } from '@/queries/admin/auth';
 
 const Navbar = () => {
   const router = useRouter();
-  const { data: meData } = useAuthMe();
+  const { data: meData } = useAdminAuthMe();
 
   const logout = () => {
     removeToken();

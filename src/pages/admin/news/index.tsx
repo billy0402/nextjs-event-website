@@ -17,13 +17,13 @@ import {
 
 import { Link } from '@chakra-ui/next-js';
 
-import { useNewsDestroy, useNewsList } from '@/queries/news';
+import { useAdminNewsDestroy, useAdminNewsList } from '@/queries/admin/news';
 import { useEffect } from 'react';
 
 const NewsListPage: NextPage = () => {
   const toast = useToast();
-  const { data: newsList } = useNewsList();
-  const deleteNews = useNewsDestroy();
+  const { data: newsList } = useAdminNewsList();
+  const deleteNews = useAdminNewsDestroy();
 
   useEffect(() => {
     if (!deleteNews.isSuccess) return;

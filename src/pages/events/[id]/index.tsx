@@ -4,14 +4,14 @@ import { useRouter } from 'next/router';
 
 import { Box, Button, Heading, Text, VStack } from '@chakra-ui/react';
 
-import { useEventRetrieve } from '@/queries/events';
+import { useAdminEventRetrieve } from '@/queries/admin/events';
 
 const EventDetailPage: NextPage = () => {
   const router = useRouter();
 
   const { id } = router.query as { id: string };
 
-  const { data: event } = useEventRetrieve(id);
+  const { data: event } = useAdminEventRetrieve(id);
 
   return (
     <Box p={6}>

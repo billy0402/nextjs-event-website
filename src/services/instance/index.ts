@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { BASE_API_URL } from '@/fixtures/constants';
 import { getToken, removeToken, setToken } from '@/helpers/token';
-import { apiAuthRefresh } from '@/services/auth';
+import { apiAdminAuthRefresh } from '@/services/admin/auth';
 
 const instance = axios.create({
   baseURL: BASE_API_URL,
@@ -30,7 +30,7 @@ instance.interceptors.response.use(
         const token = getToken();
         if (!token) return await Promise.reject(error);
 
-        const newToken = await apiAuthRefresh({
+        const newToken = await apiAdminAuthRefresh({
           refreshToken: token.refreshToken,
         });
         setToken(newToken);

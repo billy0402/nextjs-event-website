@@ -11,10 +11,10 @@ import { useForm } from 'react-hook-form';
 import type { FieldConfig } from '@/components/Field';
 import Field from '@/components/Field';
 import {
-  useEventCreate,
-  useEventRetrieve,
-  useEventUpdate,
-} from '@/queries/events';
+  useAdminEventCreate,
+  useAdminEventRetrieve,
+  useAdminEventUpdate,
+} from '@/queries/admin/events';
 
 const fieldConfigs: FieldConfig[] = [
   {
@@ -61,9 +61,9 @@ const EventEditPage: NextPage = () => {
   const { id } = router.query as { id: string };
   const isCreate = id === 'create';
 
-  const { data: event } = useEventRetrieve(id);
-  const createEvent = useEventCreate();
-  const updateEvent = useEventUpdate(id);
+  const { data: event } = useAdminEventRetrieve(id);
+  const createEvent = useAdminEventCreate();
+  const updateEvent = useAdminEventUpdate(id);
 
   const {
     register,

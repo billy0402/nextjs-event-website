@@ -11,7 +11,7 @@ import { removeToken } from '@/helpers/token';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import type { TokenData, TokenPayload } from '@/schema/auth';
 
-const useAuth = () => {
+const useAdminAuth = () => {
   const router = useRouter();
   const toast = useToast();
 
@@ -42,4 +42,4 @@ const useAuth = () => {
   return { tokenData };
 };
 
-export default useAuth;
+export default useAdminAuth;

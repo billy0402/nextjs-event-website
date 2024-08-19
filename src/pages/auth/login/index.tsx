@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 
 import type { FieldConfig } from '@/components/Field';
 import Field from '@/components/Field';
-import { useAuthLogin } from '@/queries/auth';
+import { useAdminAuthLogin } from '@/queries/admin/auth';
 
 const fieldConfigs: FieldConfig[] = [
   {
@@ -26,7 +26,7 @@ const fieldConfigs: FieldConfig[] = [
 
 const LoginPage: NextPage = () => {
   const router = useRouter();
-  const login = useAuthLogin(() => {
+  const login = useAdminAuthLogin(() => {
     router.push('/');
   });
 

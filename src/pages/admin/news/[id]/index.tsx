@@ -10,7 +10,11 @@ import { useForm } from 'react-hook-form';
 
 import type { FieldConfig } from '@/components/Field';
 import Field from '@/components/Field';
-import { useNewsCreate, useNewsRetrieve, useNewsUpdate } from '@/queries/news';
+import {
+  useAdminNewsCreate,
+  useAdminNewsRetrieve,
+  useAdminNewsUpdate,
+} from '@/queries/admin/news';
 
 const fieldConfigs: FieldConfig[] = [
   {
@@ -63,9 +67,9 @@ const NewsEditPage: NextPage = () => {
   const { id } = router.query as { id: string };
   const isCreate = id === 'create';
 
-  const { data: news } = useNewsRetrieve(id);
-  const createNews = useNewsCreate();
-  const updateNews = useNewsUpdate(id);
+  const { data: news } = useAdminNewsRetrieve(id);
+  const createNews = useAdminNewsCreate();
+  const updateNews = useAdminNewsUpdate(id);
 
   const {
     register,

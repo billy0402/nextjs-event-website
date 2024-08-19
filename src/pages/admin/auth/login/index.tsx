@@ -9,7 +9,7 @@ import { Role } from '@prisma/client';
 
 import type { FieldConfig } from '@/components/Field';
 import Field from '@/components/Field';
-import { useAuthLogin } from '@/queries/auth';
+import { useAdminAuthLogin } from '@/queries/admin/auth';
 
 const fieldConfigs: FieldConfig[] = [
   {
@@ -29,7 +29,7 @@ const fieldConfigs: FieldConfig[] = [
 const AdminLoginPage: NextPage = () => {
   const toast = useToast();
   const router = useRouter();
-  const login = useAuthLogin((tokenData) => {
+  const login = useAdminAuthLogin((tokenData) => {
     if (tokenData?.role !== Role.ADMIN) {
       toast({
         status: 'error',

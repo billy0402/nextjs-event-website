@@ -17,14 +17,14 @@ import {
   Tr,
 } from '@chakra-ui/react';
 
-import { useEventReservationList } from '@/queries/events';
+import { useAdminEventReservationList } from '@/queries/admin/events';
 
 const ReservationListPage: NextPage = () => {
   const router = useRouter();
 
   const { id } = router.query as { id: string };
 
-  const { data: eventReservations } = useEventReservationList(id);
+  const { data: eventReservations } = useAdminEventReservationList(id);
 
   return (
     <Box p={5}>

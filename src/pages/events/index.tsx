@@ -3,10 +3,10 @@ import type { NextPage } from 'next';
 import { Link } from '@chakra-ui/next-js';
 import { Box, Heading, ListItem, Text, UnorderedList } from '@chakra-ui/react';
 
-import { useEventList } from '@/queries/events';
+import { useAdminEventList } from '@/queries/admin/events';
 
 const EventPage: NextPage = () => {
-  const { data: events } = useEventList();
+  const { data: events } = useAdminEventList();
 
   return (
     <Box p={6}>

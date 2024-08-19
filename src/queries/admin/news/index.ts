@@ -4,13 +4,13 @@ import { ApiModule } from '@/enums/api-module';
 import { queryClient } from '@/queries/client';
 import type { NewsIn } from '@/schema/news';
 import {
-  apiNewsCreate,
-  apiNewsDestroy,
-  apiNewsList,
-  apiNewsPartUpdate,
-  apiNewsRetrieve,
-  apiNewsUpdate,
-} from '@/services/news';
+  apiAdminNewsCreate,
+  apiAdminNewsDestroy,
+  apiAdminNewsList,
+  apiAdminNewsPartUpdate,
+  apiAdminNewsRetrieve,
+  apiAdminNewsUpdate,
+} from '@/services/admin/news';
 
 const moduleName = ApiModule.NEWS;
 const queryKeys = {
@@ -18,51 +18,51 @@ const queryKeys = {
   retrieve: (id: string) => [moduleName, 'retrieve', id] as const,
 };
 
-export const useNewsList = () => {
+export const useAdminNewsList = () => {
   return useQuery({
     queryKey: queryKeys.list(),
-    queryFn: () => apiNewsList(),
+    queryFn: () => apiAdminNewsList(),
   });
 };
 
-export const useNewsRetrieve = (id: string) => {
+export const useAdminNewsRetrieve = (id: string) => {
   return useQuery({
     queryKey: queryKeys.retrieve(id),
-    queryFn: () => apiNewsRetrieve(id),
+    queryFn: () => apiAdminNewsRetrieve(id),
     enabled: !!id && id !== 'create',
   });
 };
 
-export const useNewsCreate = () => {
+export const useAdminNewsCreate = () => {
   return useMutation({
-    mutationFn: (data: NewsIn) => apiNewsCreate(data),
+    mutationFn: (data: NewsIn) => apiAdminNewsCreate(data),
     onSuccess: (data) => {
       queryClient.setQueryData(queryKeys.retrieve(data.id), data);
     },
   });
 };
 
-export const useNewsUpdate = (id: string) => {
+export const useAdminNewsUpdate = (id: string) => {
   return useMutation({
-    mutationFn: (data: NewsIn) => apiNewsUpdate(id, data),
+    mutationFn: (data: NewsIn) => apiAdminNewsUpdate(id, data),
     onSuccess: (data) => {
       queryClient.setQueryData(queryKeys.retrieve(id), data);
     },
   });
 };
 
-export const useNewsPartUpdate = (id: string) => {
+export const useAdminNewsPartUpdate = (id: string) => {
   return useMutation({
-    mutationFn: (data: Partial<NewsIn>) => apiNewsPartUpdate(id, data),
+    mutationFn: (data: Partial<NewsIn>) => apiAdminNewsPartUpdate(id, data),
     onSuccess: (data) => {
       queryClient.setQueryData(queryKeys.retrieve(id), data);
     },
   });
 };
 
-export const useNewsDestroy = () => {
+export const useAdminNewsDestroy = () => {
   return useMutation({
-    mutationFn: (id: string) => apiNewsDestroy(id),
+    mutationFn: (id: string) => apiAdminNewsDestroy(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.list() });
     },

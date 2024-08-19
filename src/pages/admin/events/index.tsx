@@ -16,10 +16,10 @@ import {
 
 import { Link } from '@chakra-ui/next-js';
 
-import { useEventList } from '@/queries/events';
+import { useAdminEventList } from '@/queries/admin/events';
 
 const EventListPage: NextPage = () => {
-  const { data: events } = useEventList();
+  const { data: events } = useAdminEventList();
 
   return (
     <Box p={5}>

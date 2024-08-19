@@ -4,11 +4,11 @@ import { ApiModule } from '@/enums/api-module';
 import { queryClient } from '@/queries/client';
 import type { ReservationIn } from '@/schema/reservation';
 import {
-  apiReservationCreate,
-  apiReservationDestroy,
-  apiReservationList,
-  apiReservationRetrieve,
-} from '@/services/reservations';
+  apiAdminReservationCreate,
+  apiAdminReservationDestroy,
+  apiAdminReservationList,
+  apiAdminReservationRetrieve,
+} from '@/services/admin/reservations';
 
 const moduleName = ApiModule.RESERVATIONS;
 const queryKeys = {
@@ -17,33 +17,33 @@ const queryKeys = {
   retrieve: (id: string) => [moduleName, 'retrieve', id] as const,
 };
 
-export const useReservationList = (params: { eventId?: string } = {}) => {
+export const useAdminReservationList = (params: { eventId?: string } = {}) => {
   return useQuery({
     queryKey: queryKeys.list(params),
-    queryFn: () => apiReservationList(params),
+    queryFn: () => apiAdminReservationList(params),
   });
 };
 
-export const useReservationRetrieve = (id: string) => {
+export const useAdminReservationRetrieve = (id: string) => {
   return useQuery({
     queryKey: queryKeys.retrieve(id),
-    queryFn: () => apiReservationRetrieve(id),
+    queryFn: () => apiAdminReservationRetrieve(id),
     enabled: !!id,
   });
 };
 
-export const useReservationCreate = () => {
+export const useAdminReservationCreate = () => {
   return useMutation({
-    mutationFn: (data: ReservationIn) => apiReservationCreate(data),
+    mutationFn: (data: ReservationIn) => apiAdminReservationCreate(data),
     onSuccess: (data) => {
       queryClient.setQueryData(queryKeys.retrieve(data.id), data);
     },
   });
 };
 
-export const useReservationDestroy = () => {
+export const useAdminReservationDestroy = () => {
   return useMutation({
-    mutationFn: (id: string) => apiReservationDestroy(id),
+    mutationFn: (id: string) => apiAdminReservationDestroy(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.list() });
     },

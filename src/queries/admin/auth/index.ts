@@ -5,11 +5,11 @@ import { getToken, getTokenData, setToken } from '@/helpers/token';
 import { queryClient } from '@/queries/client';
 import type { TokenData } from '@/schema/auth';
 import {
-  apiAuthLogin,
-  apiAuthMe,
-  apiAuthRefresh,
-  apiAuthRegister,
-} from '@/services/auth';
+  apiAdminAuthLogin,
+  apiAdminAuthMe,
+  apiAdminAuthRefresh,
+  apiAdminAuthRegister,
+} from '@/services/admin/auth';
 
 const moduleName = ApiModule.AUTH;
 const queryKeys = {
@@ -17,11 +17,11 @@ const queryKeys = {
   user: () => [moduleName, 'user'] as const,
 };
 
-export const useAuthLogin = (
+export const useAdminAuthLogin = (
   onSuccess: (tokenData: TokenData | undefined) => void,
 ) => {
   return useMutation({
-    mutationFn: apiAuthLogin,
+    mutationFn: apiAdminAuthLogin,
     onSuccess: (data) => {
       setToken(data);
       const tokenData = getTokenData('accessToken');
@@ -30,9 +30,9 @@ export const useAuthLogin = (
   });
 };
 
-export const useAuthRefresh = () => {
+export const useAdminAuthRefresh = () => {
   return useMutation({
-    mutationFn: apiAuthRefresh,
+    mutationFn: apiAdminAuthRefresh,
     onSuccess: (data) => {
       const token = getToken();
       setToken({ ...token, ...data });
@@ -40,17 +40,17 @@ export const useAuthRefresh = () => {
   });
 };
 
-export const useAuthMe = () => {
+export const useAdminAuthMe = () => {
   return useQuery({
     queryKey: queryKeys.user(),
-    queryFn: apiAuthMe,
+    queryFn: apiAdminAuthMe,
     enabled: !!getToken(),
   });
 };
 
-export const useAuthRegister = () => {
+export const useAdminAuthRegister = () => {
   return useMutation({
-    mutationFn: apiAuthRegister,
+    mutationFn: apiAdminAuthRegister,
     onSuccess: (data) => {
       queryClient.setQueryData(queryKeys.user(), data);
     },

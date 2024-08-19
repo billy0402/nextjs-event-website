@@ -4,14 +4,14 @@ import { ApiModule } from '@/enums/api-module';
 import { queryClient } from '@/queries/client';
 import type { EventIn } from '@/schema/event';
 import {
-  apiEventCreate,
-  apiEventDestroy,
-  apiEventList,
-  apiEventPartUpdate,
-  apiEventReservationList,
-  apiEventRetrieve,
-  apiEventUpdate,
-} from '@/services/events';
+  apiAdminEventCreate,
+  apiAdminEventDestroy,
+  apiAdminEventList,
+  apiAdminEventPartUpdate,
+  apiAdminEventReservationList,
+  apiAdminEventRetrieve,
+  apiAdminEventUpdate,
+} from '@/services/admin/events';
 
 const moduleName = ApiModule.EVENTS;
 const queryKeys = {
@@ -20,61 +20,61 @@ const queryKeys = {
   reservations: (id: string) => [moduleName, 'reservations', id] as const,
 };
 
-export const useEventList = () => {
+export const useAdminEventList = () => {
   return useQuery({
     queryKey: queryKeys.list(),
-    queryFn: () => apiEventList(),
+    queryFn: () => apiAdminEventList(),
   });
 };
 
-export const useEventRetrieve = (id: string) => {
+export const useAdminEventRetrieve = (id: string) => {
   return useQuery({
     queryKey: queryKeys.retrieve(id),
-    queryFn: () => apiEventRetrieve(id),
+    queryFn: () => apiAdminEventRetrieve(id),
     enabled: !!id && id !== 'create',
   });
 };
 
-export const useEventCreate = () => {
+export const useAdminEventCreate = () => {
   return useMutation({
-    mutationFn: (data: EventIn) => apiEventCreate(data),
+    mutationFn: (data: EventIn) => apiAdminEventCreate(data),
     onSuccess: (data) => {
       queryClient.setQueryData(queryKeys.retrieve(data.id), data);
     },
   });
 };
 
-export const useEventUpdate = (id: string) => {
+export const useAdminEventUpdate = (id: string) => {
   return useMutation({
-    mutationFn: (data: EventIn) => apiEventUpdate(id, data),
+    mutationFn: (data: EventIn) => apiAdminEventUpdate(id, data),
     onSuccess: (data) => {
       queryClient.setQueryData(queryKeys.retrieve(id), data);
     },
   });
 };
 
-export const useEventPartUpdate = (id: string) => {
+export const useAdminEventPartUpdate = (id: string) => {
   return useMutation({
-    mutationFn: (data: Partial<EventIn>) => apiEventPartUpdate(id, data),
+    mutationFn: (data: Partial<EventIn>) => apiAdminEventPartUpdate(id, data),
     onSuccess: (data) => {
       queryClient.setQueryData(queryKeys.retrieve(id), data);
     },
   });
 };
 
-export const useEventDestroy = () => {
+export const useAdminEventDestroy = () => {
   return useMutation({
-    mutationFn: (id: string) => apiEventDestroy(id),
+    mutationFn: (id: string) => apiAdminEventDestroy(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.list() });
     },
   });
 };
 
-export const useEventReservationList = (id: string) => {
+export const useAdminEventReservationList = (id: string) => {
   return useQuery({
     queryKey: queryKeys.reservations(id),
-    queryFn: () => apiEventReservationList(id),
+    queryFn: () => apiAdminEventReservationList(id),
     enabled: !!id,
   });
 };
