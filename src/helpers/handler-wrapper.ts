@@ -2,11 +2,17 @@ import util from 'util';
 
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 
+import jwt from 'jsonwebtoken';
+
+import prisma from '@/db';
+import env from '@/fixtures/env';
+import type { TokenData } from '@/schema/auth';
+import { Role } from '@prisma/client';
+
 export function withServerError(handler: NextApiHandler): NextApiHandler {
   return async (req: NextApiRequest, res: NextApiResponse) => {
     try {
-      await handler(req, res);
-      return undefined;
+      return await handler(req, res);
     } catch (error) {
       console.error(
         'API Error:',
@@ -14,5 +20,33 @@ export function withServerError(handler: NextApiHandler): NextApiHandler {
       );
       return res.status(500).json({ message: 'Internal Server Error' });
     }
+  };
+}
+
+export function withAdminGuard(handler: NextApiHandler): NextApiHandler {
+  return async (req: NextApiRequest, res: NextApiResponse) => {
+    const token = req.headers.authorization?.replace('Bearer ', '');
+    if (!token) {
+      res.status(401).json({ message: 'No token provided' });
+      return;
+    }
+
+    let tokenData: TokenData;
+    try {
+      tokenData = jwt.verify(token, env.ACCESS_TOKEN_SECRET) as TokenData;
+    } catch (error) {
+      res.status(401).json({ message: 'Invalid token' });
+      return;
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: tokenData.userId },
+    });
+    if (user?.role !== Role.ADMIN) {
+      res.status(403).json({ message: 'Forbidden' });
+      return false;
+    }
+
+    return await handler(req, res);
   };
 }

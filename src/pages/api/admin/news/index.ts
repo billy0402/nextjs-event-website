@@ -4,7 +4,7 @@ import { Role } from '@prisma/client';
 
 import prisma from '@/db';
 import { roleGuard, validationGuard } from '@/helpers/api-guard';
-import { withServerError } from '@/helpers/handler-wrapper';
+import { withAdminGuard, withServerError } from '@/helpers/handler-wrapper';
 import type { ApiError } from '@/models/error';
 import type { NewsOut } from '@/schema/news';
 import { NewsInSchema, NewsOutSchema } from '@/schema/news';
@@ -35,4 +35,4 @@ async function handler(
   }
 }
 
-export default withServerError(handler);
+export default withServerError(withAdminGuard(handler));
