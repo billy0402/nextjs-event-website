@@ -35,21 +35,25 @@ async function handler(
       const { eventId } = data;
 
       const event = await prisma.event.findUnique({
-        where: { id: eventId, isActive: true },
+        where: {
+          id: eventId,
+          startDateTime: { gte: new Date() },
+          isActive: true,
+        },
       });
       if (!event) {
         return res.status(404).json({ message: 'Event not found' });
       }
 
       const reservation = await prisma.reservation.findFirst({
-        where: { userId: tokenData.userId, eventId },
+        where: { eventId, userId: tokenData.userId },
       });
       if (reservation) {
         return res.status(400).json({ message: 'Already reserved' });
       }
 
       const createdReservation = await prisma.reservation.create({
-        data: { userId: tokenData.userId, eventId },
+        data: { eventId, userId: tokenData.userId },
         include: { event: true, user: true },
       });
       const response = ReservationOutSchema.parse(createdReservation);

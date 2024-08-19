@@ -26,13 +26,15 @@ async function main() {
     {
       title: 'Tech Conference 2024',
       description: 'A conference for tech enthusiasts and professionals.',
-      date: new Date('2024-09-15T10:00:00Z'),
+      startDateTime: new Date('2024-09-15T10:00:00Z'),
+      endDateTime: new Date('2024-09-16T18:00:00Z'),
       location: 'Convention Center, Cityville',
     },
     {
       title: 'Art Exhibition',
       description: 'An exhibition showcasing modern art.',
-      date: new Date('2024-10-01T18:00:00Z'),
+      startDateTime: new Date('2024-10-01T18:00:00Z'),
+      endDateTime: new Date('2024-10-03T22:00:00Z'),
       location: 'Gallery Space, Art Town',
     },
   ];

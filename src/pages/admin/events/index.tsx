@@ -36,7 +36,8 @@ const EventListPage: NextPage = () => {
           <Thead>
             <Tr>
               <Th>Title</Th>
-              <Th>Date</Th>
+              <Th>Start DateTime</Th>
+              <Th>End DateTime</Th>
               <Th>Active</Th>
               <Th>Actions</Th>
             </Tr>
@@ -46,7 +47,8 @@ const EventListPage: NextPage = () => {
               events.map((event) => (
                 <Tr key={event.id}>
                   <Td>{event.title}</Td>
-                  <Td>{new Date(event.date).toLocaleDateString()}</Td>
+                  <Td>{new Date(event.startDateTime).toLocaleDateString()}</Td>
+                  <Td>{new Date(event.endDateTime).toLocaleDateString()}</Td>
                   <Td>{event.isActive ? '是' : '否'}</Td>
                   <Td>
                     <Link href={`/admin/events/${event.id}`}>

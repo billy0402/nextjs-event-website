@@ -30,9 +30,15 @@ const fieldConfigs: FieldConfig[] = [
     required: false,
   },
   {
-    name: 'date',
-    label: 'Date',
-    type: 'date',
+    name: 'startDateTime',
+    label: 'Start DateTime',
+    type: 'datetime-local',
+    required: true,
+  },
+  {
+    name: 'endDateTime',
+    label: 'End DateTime',
+    type: 'datetime-local',
     required: true,
   },
   {
@@ -75,8 +81,8 @@ const EventEditPage: NextPage = () => {
   const onSubmit = (data: any) => {
     const formatDate = {
       ...data,
-      date: new Date(data.date).toISOString(),
-      id: undefined,
+      startDateTime: new Date(data.startDateTime).toISOString(),
+      endDateTime: new Date(data.endDateTime).toISOString(),
     };
     if (isCreate) {
       createEvent.mutate(formatDate);
@@ -89,7 +95,8 @@ const EventEditPage: NextPage = () => {
     if (!event) return;
     reset({
       ...event,
-      date: event.date.toString().split('T')[0],
+      startDateTime: event.startDateTime.toString().slice(0, 16),
+      endDateTime: event.endDateTime.toString().slice(0, 16),
     });
   }, [event, reset]);
 

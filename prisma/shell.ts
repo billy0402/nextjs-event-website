@@ -9,7 +9,7 @@ prisma.$on('query', (e) => {
 });
 
 async function main() {
-  const events = await prisma.user.findMany();
+  const events = await prisma.event.findMany();
   console.log(events);
 }
 

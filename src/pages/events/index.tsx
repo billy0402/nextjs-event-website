@@ -27,7 +27,7 @@ const EventPage: NextPage = () => {
             </Heading>
             <Text mb={2}>{event.description}</Text>
             <Text mb={2}>
-              Date: {new Date(event.date).toLocaleDateString('zh-TW')}
+              Date: {new Date(event.startDateTime).toLocaleDateString('zh-TW')}
             </Text>
             {event.location && <Text mb={2}>Location: {event.location}</Text>}
             <Link

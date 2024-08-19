@@ -20,7 +20,8 @@ const EventDetailPage: NextPage = () => {
         <Text fontSize='lg'>{event?.description}</Text>
         <Text fontWeight='bold'>
           Date:
-          {event?.date && new Date(event.date).toLocaleDateString('zh-TW')}
+          {event?.startDateTime &&
+            new Date(event.startDateTime).toLocaleDateString('zh-TW')}
         </Text>
         {event?.location && (
           <Text fontWeight='bold'>Location: {event?.location}</Text>

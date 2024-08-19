@@ -15,7 +15,7 @@ async function handler(
   switch (req.method) {
     case 'GET': {
       const news = await prisma.news.findUnique({
-        where: { id, isActive: true },
+        where: { id, publishedAt: { lte: new Date() }, isActive: true },
       });
       if (!news) {
         return res.status(404).json({ message: 'News not found' });

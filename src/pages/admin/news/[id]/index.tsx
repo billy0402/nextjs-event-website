@@ -43,7 +43,7 @@ const fieldConfigs: FieldConfig[] = [
   },
   {
     name: 'publishedAt',
-    label: 'Date',
+    label: 'Published At',
     type: 'date',
     required: true,
   },
@@ -94,7 +94,6 @@ const NewsEditPage: NextPage = () => {
     if (!news) return;
     reset({
       ...news,
-      id: undefined,
       publishedAt: news.publishedAt.toString().split('T')[0],
     });
   }, [news, reset]);
