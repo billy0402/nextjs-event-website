@@ -1,7 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { Role } from '@prisma/client';
-
 import prisma from '@/db';
 import { authGuard, validationGuard } from '@/helpers/api-guard';
 import { withServerError } from '@/helpers/handler-wrapper';
@@ -21,14 +19,9 @@ async function handler(
       const tokenData = authGuard(req, res);
       if (!tokenData) return;
 
-      const { eventId } = req.query as { eventId?: string };
-
       const reservations = await prisma.reservation.findMany({
         include: { event: true, user: true },
-        where:
-          eventId && tokenData.role === Role.ADMIN
-            ? { eventId }
-            : { userId: tokenData.userId },
+        where: { userId: tokenData.userId },
       });
       const response = ReservationOutSchema.array().parse(reservations);
       return res.status(200).json(response);
@@ -41,7 +34,9 @@ async function handler(
       if (!data) return;
       const { eventId } = data;
 
-      const event = await prisma.event.findUnique({ where: { id: eventId } });
+      const event = await prisma.event.findUnique({
+        where: { id: eventId, isActive: true },
+      });
       if (!event) {
         return res.status(404).json({ message: 'Event not found' });
       }

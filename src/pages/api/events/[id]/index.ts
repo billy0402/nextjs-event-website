@@ -14,7 +14,9 @@ async function handler(
 
   switch (req.method) {
     case 'GET': {
-      const event = await prisma.event.findUnique({ where: { id } });
+      const event = await prisma.event.findUnique({
+        where: { id, isActive: true },
+      });
       if (!event) {
         return res.status(404).json({ message: 'Event not found' });
       }

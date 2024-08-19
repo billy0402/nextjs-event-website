@@ -12,7 +12,9 @@ async function handler(
 ) {
   switch (req.method) {
     case 'GET': {
-      const newsList = await prisma.news.findMany();
+      const newsList = await prisma.news.findMany({
+        where: { isActive: true },
+      });
       const response = NewsOutSchema.array().parse(newsList);
       return res.status(200).json(response);
     }

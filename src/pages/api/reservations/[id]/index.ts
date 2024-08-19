@@ -23,7 +23,7 @@ async function handler(
 
       const reservation = await prisma.reservation.findUnique({
         include: { event: true, user: true },
-        where: { id },
+        where: { id, userId: tokenData.userId },
       });
       if (!reservation) {
         return res.status(404).json({ message: 'Reservation not found' });

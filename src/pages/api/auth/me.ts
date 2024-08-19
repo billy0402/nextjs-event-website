@@ -14,7 +14,7 @@ async function handler(
   switch (req.method) {
     case 'GET': {
       const token = authGuard(req, res);
-      if (!token) return undefined;
+      if (!token) return;
 
       const user = await prisma.user.findUnique({
         where: { id: token.userId },
