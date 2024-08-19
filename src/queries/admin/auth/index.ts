@@ -10,7 +10,7 @@ import {
   apiAdminAuthRegister,
 } from '@/services/admin/auth';
 
-const moduleName = ApiModule.AUTH;
+const moduleName = ApiModule.ADMIN_AUTH;
 const queryKeys = {
   tokenUser: () => [moduleName, 'tokenUser'] as const,
   user: () => [moduleName, 'user'] as const,

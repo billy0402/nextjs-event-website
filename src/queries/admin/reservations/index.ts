@@ -10,7 +10,7 @@ import {
   apiAdminReservationRetrieve,
 } from '@/services/admin/reservations';
 
-const moduleName = ApiModule.RESERVATIONS;
+const moduleName = ApiModule.ADMIN_RESERVATIONS;
 const queryKeys = {
   list: (params: { eventId?: string } = {}) =>
     [moduleName, 'list', params] as const,

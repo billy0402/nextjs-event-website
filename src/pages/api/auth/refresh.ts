@@ -16,7 +16,7 @@ async function handler(
   switch (req.method) {
     case 'POST': {
       const data = validationGuard(RefreshInSchema, req, res);
-      if (!data) return undefined;
+      if (!data) return;
       const { refreshToken } = data;
 
       let tokenData: jwt.JwtPayload;

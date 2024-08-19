@@ -8,6 +8,7 @@ import { withServerError } from '@/helpers/handler-wrapper';
 import type { ApiError } from '@/models/error';
 import type { UserInfo } from '@/schema/auth';
 import { RegisterInSchema, UserInfoSchema } from '@/schema/auth';
+import { Role } from '@prisma/client';
 
 async function handler(
   req: NextApiRequest,
@@ -16,7 +17,7 @@ async function handler(
   switch (req.method) {
     case 'POST': {
       const data = validationGuard(RegisterInSchema, req, res);
-      if (!data) return undefined;
+      if (!data) return;
       const { email, password } = data;
 
       const user = await prisma.user.findUnique({ where: { email } });
@@ -26,7 +27,7 @@ async function handler(
 
       const hashedPassword = await hash(password, 10);
       const newUser = await prisma.user.create({
-        data: { ...data, password: hashedPassword },
+        data: { ...data, password: hashedPassword, role: Role.ADMIN },
       });
       const response = UserInfoSchema.parse(newUser);
       return res.status(201).json(response);

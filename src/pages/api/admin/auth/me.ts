@@ -1,7 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+import jwt from 'jsonwebtoken';
+
 import prisma from '@/db';
-import { authGuard } from '@/helpers/api-guard';
+import env from '@/fixtures/env';
 import { withAdminGuard, withServerError } from '@/helpers/handler-wrapper';
 import type { ApiError } from '@/models/error';
 import type { UserInfo } from '@/schema/auth';
@@ -13,11 +15,14 @@ async function handler(
 ) {
   switch (req.method) {
     case 'GET': {
-      const token = authGuard(req, res);
-      if (!token) return undefined;
+      const token = req.headers.authorization!.replace('Bearer ', '');
+      const tokenData = jwt.verify(
+        token,
+        env.ACCESS_TOKEN_SECRET,
+      ) as jwt.JwtPayload;
 
       const user = await prisma.user.findUnique({
-        where: { id: token.userId },
+        where: { id: tokenData.userId },
       });
       const response = UserInfoSchema.parse(user);
       return res.status(200).json(response);

@@ -13,7 +13,7 @@ import {
   apiAdminEventUpdate,
 } from '@/services/admin/events';
 
-const moduleName = ApiModule.EVENTS;
+const moduleName = ApiModule.ADMIN_EVENTS;
 const queryKeys = {
   list: () => [moduleName, 'list'] as const,
   retrieve: (id: string) => [moduleName, 'retrieve', id] as const,

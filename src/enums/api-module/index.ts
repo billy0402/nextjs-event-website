@@ -1,6 +1,6 @@
 export enum ApiModule {
-  AUTH = 'auth',
-  EVENTS = 'events',
-  RESERVATIONS = 'reservations',
-  NEWS = 'NEWS',
+  ADMIN_AUTH = 'adminAuth',
+  ADMIN_EVENTS = 'adminEvents',
+  ADMIN_RESERVATIONS = 'adminReservations',
+  ADMIN_NEWS = 'adminNews',
 }

@@ -19,7 +19,7 @@ async function handler(
   switch (req.method) {
     case 'GET': {
       const tokenData = authGuard(req, res);
-      if (!tokenData) return undefined;
+      if (!tokenData) return;
 
       const { eventId } = req.query as { eventId?: string };
 
@@ -35,10 +35,10 @@ async function handler(
     }
     case 'POST': {
       const tokenData = authGuard(req, res);
-      if (!tokenData) return undefined;
+      if (!tokenData) return;
 
       const data = validationGuard(ReservationInSchema, req, res);
-      if (!data) return undefined;
+      if (!data) return;
       const { eventId } = data;
 
       const event = await prisma.event.findUnique({ where: { id: eventId } });

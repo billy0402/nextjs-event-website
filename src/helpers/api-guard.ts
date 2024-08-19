@@ -1,10 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import type { Role, User } from '@prisma/client';
 import jwt from 'jsonwebtoken';
 import type { ZodType, z } from 'zod';
 
-import prisma from '@/db';
 import env from '@/fixtures/env';
 
 export function authGuard(
@@ -24,26 +22,6 @@ export function authGuard(
     res.status(401).json({ message: 'Invalid token' });
     return false;
   }
-}
-
-export async function roleGuard(
-  role: Role,
-  req: NextApiRequest,
-  res: NextApiResponse,
-): Promise<User | false> {
-  const tokenData = authGuard(req, res);
-  if (!tokenData) return false;
-
-  const user = await prisma.user.findUnique({
-    where: { id: tokenData.userId },
-  });
-
-  if (user?.role !== role) {
-    res.status(403).json({ message: 'Forbidden' });
-    return false;
-  }
-
-  return user;
 }
 
 export function validationGuard<T extends ZodType>(

@@ -16,7 +16,7 @@ async function handler(
   switch (req.method) {
     case 'POST': {
       const data = validationGuard(RegisterInSchema, req, res);
-      if (!data) return undefined;
+      if (!data) return;
       const { email, password } = data;
 
       const user = await prisma.user.findUnique({ where: { email } });

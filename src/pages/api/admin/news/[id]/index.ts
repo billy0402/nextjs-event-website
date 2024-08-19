@@ -1,9 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { Role } from '@prisma/client';
-
 import prisma from '@/db';
-import { roleGuard, validationGuard } from '@/helpers/api-guard';
+import { validationGuard } from '@/helpers/api-guard';
 import { withAdminGuard, withServerError } from '@/helpers/handler-wrapper';
 import type { ApiError } from '@/models/error';
 import type { NewsOut } from '@/schema/news';
@@ -22,21 +20,15 @@ async function handler(
         return res.status(404).json({ message: 'News not found' });
       }
 
-      const updatedNews = await prisma.news.update({
-        data: { views: { increment: 1 } },
-        where: { id },
-      });
-      const response = NewsOutSchema.parse(updatedNews);
+      const response = NewsOutSchema.parse(news);
       return res.status(200).json(response);
     }
     case 'PUT':
     case 'PATCH': {
-      if (!roleGuard(Role.ADMIN, req, res)) return undefined;
-
-      const schema =
+      const Schema =
         req.method === 'PUT' ? NewsInSchema : NewsInSchema.partial();
-      const data = validationGuard(schema, req, res);
-      if (!data) return undefined;
+      const data = validationGuard(Schema, req, res);
+      if (!data) return;
 
       const news = await prisma.news.findUnique({ where: { id } });
       if (!news) {
@@ -51,8 +43,6 @@ async function handler(
       return res.status(200).json(response);
     }
     case 'DELETE': {
-      if (!roleGuard(Role.ADMIN, req, res)) return undefined;
-
       const news = await prisma.news.findUnique({ where: { id } });
       if (!news) {
         return res.status(404).json({ message: 'News not found' });

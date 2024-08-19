@@ -1,9 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { Role } from '@prisma/client';
-
 import prisma from '@/db';
-import { roleGuard, validationGuard } from '@/helpers/api-guard';
+import { validationGuard } from '@/helpers/api-guard';
 import { withAdminGuard, withServerError } from '@/helpers/handler-wrapper';
 import type { ApiError } from '@/models/error';
 import type { EventOut } from '@/schema/event';
@@ -27,12 +25,10 @@ async function handler(
     }
     case 'PUT':
     case 'PATCH': {
-      if (!roleGuard(Role.ADMIN, req, res)) return undefined;
-
-      const schema =
+      const Schema =
         req.method === 'PUT' ? EventInSchema : EventInSchema.partial();
-      const data = validationGuard(schema, req, res);
-      if (!data) return undefined;
+      const data = validationGuard(Schema, req, res);
+      if (!data) return;
 
       const event = await prisma.event.findUnique({ where: { id } });
       if (!event) {
@@ -47,8 +43,6 @@ async function handler(
       return res.status(200).json(response);
     }
     case 'DELETE': {
-      if (!roleGuard(Role.ADMIN, req, res)) return undefined;
-
       const reservations = await prisma.reservation.findMany({
         where: { eventId: id },
       });

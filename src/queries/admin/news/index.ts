@@ -12,7 +12,7 @@ import {
   apiAdminNewsUpdate,
 } from '@/services/admin/news';
 
-const moduleName = ApiModule.NEWS;
+const moduleName = ApiModule.ADMIN_NEWS;
 const queryKeys = {
   list: () => [moduleName, 'list'] as const,
   retrieve: (id: string) => [moduleName, 'retrieve', id] as const,

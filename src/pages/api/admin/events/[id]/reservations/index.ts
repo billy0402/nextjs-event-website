@@ -1,9 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { Role } from '@prisma/client';
-
 import prisma from '@/db';
-import { roleGuard } from '@/helpers/api-guard';
 import { withAdminGuard, withServerError } from '@/helpers/handler-wrapper';
 import type { ApiError } from '@/models/error';
 import type { EventReservationOut } from '@/schema/event-reservation';
@@ -17,8 +14,6 @@ async function handler(
 
   switch (req.method) {
     case 'GET': {
-      if (!roleGuard(Role.ADMIN, req, res)) return undefined;
-
       const event = await prisma.event.findUnique({ where: { id } });
       if (!event) {
         return res.status(404).json({ message: 'Event not found' });

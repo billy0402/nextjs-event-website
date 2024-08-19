@@ -10,7 +10,7 @@ import { queryClient } from '@/queries/client';
 import { type TokenPayload } from '@/schema/auth';
 
 export function getToken() {
-  return getLocalStorage<TokenPayload | undefined>(LocalStorageKey.TOKEN);
+  return getLocalStorage<TokenPayload | undefined>(LocalStorageKey.ADMIN_TOKEN);
 }
 
 export function getTokenData(type: 'accessToken' | 'refreshToken') {
@@ -21,11 +21,11 @@ export function getTokenData(type: 'accessToken' | 'refreshToken') {
 }
 
 export function setToken(value: TokenPayload) {
-  setLocalStorage<TokenPayload>(LocalStorageKey.TOKEN, value);
+  setLocalStorage<TokenPayload>(LocalStorageKey.ADMIN_TOKEN, value);
 }
 
 export function removeToken() {
-  removeLocalStorage(LocalStorageKey.TOKEN);
+  removeLocalStorage(LocalStorageKey.ADMIN_TOKEN);
   queryClient.clear();
 }
 

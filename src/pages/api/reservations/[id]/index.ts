@@ -19,7 +19,7 @@ async function handler(
   switch (req.method) {
     case 'GET': {
       const tokenData = authGuard(req, res);
-      if (!tokenData) return undefined;
+      if (!tokenData) return;
 
       const reservation = await prisma.reservation.findUnique({
         include: { event: true, user: true },

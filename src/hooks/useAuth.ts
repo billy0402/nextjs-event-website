@@ -18,7 +18,7 @@ const useAdminAuth = () => {
   const { pathname } = router;
 
   const token = useLocalStorage<TokenPayload | undefined>(
-    LocalStorageKey.TOKEN,
+    LocalStorageKey.ADMIN_TOKEN,
   );
   const tokenData = useMemo(() => {
     if (!token) return undefined;
