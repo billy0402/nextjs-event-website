@@ -1,9 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { ApiModule } from '@/enums/api-module';
-import { getToken, getTokenData, setToken } from '@/helpers/token';
+import { getToken, setToken } from '@/helpers/token';
 import { queryClient } from '@/queries/client';
-import type { TokenData } from '@/schema/auth';
 import {
   apiAdminAuthLogin,
   apiAdminAuthMe,
@@ -17,15 +16,12 @@ const queryKeys = {
   user: () => [moduleName, 'user'] as const,
 };
 
-export const useAdminAuthLogin = (
-  onSuccess: (tokenData: TokenData | undefined) => void,
-) => {
+export const useAdminAuthLogin = (onSuccess: () => void) => {
   return useMutation({
     mutationFn: apiAdminAuthLogin,
     onSuccess: (data) => {
       setToken(data);
-      const tokenData = getTokenData('accessToken');
-      onSuccess(tokenData);
+      onSuccess();
     },
   });
 };

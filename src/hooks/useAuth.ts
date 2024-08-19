@@ -9,7 +9,7 @@ import { useToast } from '@chakra-ui/react';
 import { LocalStorageKey } from '@/enums/local-storage-key';
 import { removeToken } from '@/helpers/token';
 import useLocalStorage from '@/hooks/useLocalStorage';
-import type { TokenData, TokenPayload } from '@/schema/auth';
+import type { TokenPayload } from '@/schema/auth';
 
 const useAdminAuth = () => {
   const router = useRouter();
@@ -22,7 +22,7 @@ const useAdminAuth = () => {
   );
   const tokenData = useMemo(() => {
     if (!token) return undefined;
-    return jwt.decode(token.accessToken) as TokenData;
+    return jwt.decode(token.accessToken);
   }, [token]);
 
   useEffect(() => {

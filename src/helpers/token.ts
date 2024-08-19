@@ -7,11 +7,7 @@ import {
   setLocalStorage,
 } from '@/helpers/local-storage';
 import { queryClient } from '@/queries/client';
-import {
-  TokenDataSchema,
-  type TokenData,
-  type TokenPayload,
-} from '@/schema/auth';
+import { type TokenPayload } from '@/schema/auth';
 
 export function getToken() {
   return getLocalStorage<TokenPayload | undefined>(LocalStorageKey.TOKEN);
@@ -20,8 +16,7 @@ export function getToken() {
 export function getTokenData(type: 'accessToken' | 'refreshToken') {
   const token = getToken();
   if (!token) return undefined;
-  let tokenData = jwt.decode(token[type]) as TokenData;
-  tokenData = TokenDataSchema.parse(tokenData);
+  let tokenData = jwt.decode(token[type]) as jwt.JwtPayload;
   return tokenData;
 }
 
@@ -42,5 +37,5 @@ export function decodeToken() {
   const token = getToken();
   if (!token) return undefined;
 
-  return jwt.decode(token.accessToken) as TokenPayload;
+  return jwt.decode(token.accessToken) as jwt.JwtPayload;
 }

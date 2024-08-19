@@ -55,7 +55,7 @@ async function handler(
 
       const createdReservation = await prisma.reservation.create({
         data: { userId: tokenData.userId, eventId },
-        include: { event: true },
+        include: { event: true, user: true },
       });
       const response = ReservationOutSchema.parse(createdReservation);
       return res.status(201).json(response);

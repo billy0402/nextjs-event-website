@@ -9,11 +9,7 @@ import { validationGuard } from '@/helpers/api-guard';
 import { withServerError } from '@/helpers/handler-wrapper';
 import type { ApiError } from '@/models/error';
 import type { TokenPayload } from '@/schema/auth';
-import {
-  LoginInSchema,
-  TokenPayloadSchema,
-  TokenUserDataSchema,
-} from '@/schema/auth';
+import { LoginInSchema, TokenPayloadSchema } from '@/schema/auth';
 
 async function handler(
   req: NextApiRequest,
@@ -35,13 +31,16 @@ async function handler(
         return res.status(401).json({ message: 'Invalid email or password' });
       }
 
-      const tokenData = TokenUserDataSchema.parse({ ...user, userId: user.id });
-      const accessToken = jwt.sign(tokenData, env.ACCESS_TOKEN_SECRET, {
-        expiresIn: env.ACCESS_TOKEN_LIFETIME,
-      });
-      const refreshToken = jwt.sign(tokenData, env.REFRESH_TOKEN_SECRET, {
-        expiresIn: env.REFRESH_TOKEN_LIFETIME,
-      });
+      const accessToken = jwt.sign(
+        { userId: user.id },
+        env.ACCESS_TOKEN_SECRET,
+        { expiresIn: env.ACCESS_TOKEN_LIFETIME },
+      );
+      const refreshToken = jwt.sign(
+        { userId: user.id },
+        env.REFRESH_TOKEN_SECRET,
+        { expiresIn: env.REFRESH_TOKEN_LIFETIME },
+      );
 
       const response = TokenPayloadSchema.parse({ accessToken, refreshToken });
       return res.status(200).json(response);

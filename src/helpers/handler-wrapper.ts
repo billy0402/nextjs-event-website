@@ -6,7 +6,6 @@ import jwt from 'jsonwebtoken';
 
 import prisma from '@/db';
 import env from '@/fixtures/env';
-import type { TokenData } from '@/schema/auth';
 import { Role } from '@prisma/client';
 
 export function withServerError(handler: NextApiHandler): NextApiHandler {
@@ -31,9 +30,9 @@ export function withAdminGuard(handler: NextApiHandler): NextApiHandler {
       return;
     }
 
-    let tokenData: TokenData;
+    let tokenData: jwt.JwtPayload;
     try {
-      tokenData = jwt.verify(token, env.ACCESS_TOKEN_SECRET) as TokenData;
+      tokenData = jwt.verify(token, env.ACCESS_TOKEN_SECRET) as jwt.JwtPayload;
     } catch (error) {
       res.status(401).json({ message: 'Invalid token' });
       return;
@@ -44,7 +43,7 @@ export function withAdminGuard(handler: NextApiHandler): NextApiHandler {
     });
     if (user?.role !== Role.ADMIN) {
       res.status(403).json({ message: 'Forbidden' });
-      return false;
+      return;
     }
 
     return await handler(req, res);

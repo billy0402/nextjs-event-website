@@ -6,12 +6,11 @@ import type { ZodType, z } from 'zod';
 
 import prisma from '@/db';
 import env from '@/fixtures/env';
-import type { TokenData } from '@/schema/auth';
 
 export function authGuard(
   req: NextApiRequest,
   res: NextApiResponse,
-): TokenData | false {
+): jwt.JwtPayload | false {
   const token = req.headers.authorization?.replace('Bearer ', '');
 
   if (!token) {
@@ -20,7 +19,7 @@ export function authGuard(
   }
 
   try {
-    return jwt.verify(token, env.ACCESS_TOKEN_SECRET) as TokenData;
+    return jwt.verify(token, env.ACCESS_TOKEN_SECRET) as jwt.JwtPayload;
   } catch (error) {
     res.status(401).json({ message: 'Invalid token' });
     return false;

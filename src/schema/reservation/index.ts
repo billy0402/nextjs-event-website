@@ -1,17 +1,30 @@
+import { Role } from '@prisma/client';
 import { z } from 'zod';
 
-import { UserInfoSchema } from '@/schema/auth';
-import { ObjectIdSchema } from '@/schema/common';
-import { EventOutSchema } from '@/schema/event';
-
 export const ReservationInSchema = z.object({
-  eventId: ObjectIdSchema,
+  eventId: z.string().min(1),
 });
 export type ReservationIn = z.infer<typeof ReservationInSchema>;
 
 export const ReservationOutSchema = z.object({
-  id: ObjectIdSchema,
-  event: EventOutSchema,
-  user: UserInfoSchema,
+  id: z.string().min(1),
+  event: z.object({
+    id: z.string().min(1),
+    title: z.string().min(1),
+    description: z.string().nullish().default(null),
+    date: z.date(),
+    location: z.string().nullish().default(null),
+    isActive: z.boolean(),
+    createdAt: z.date(),
+    updatedAt: z.date(),
+  }),
+  user: z.object({
+    id: z.string().min(1),
+    email: z.string().email().min(1),
+    name: z.string().min(1),
+    role: z.nativeEnum(Role),
+    createdAt: z.date(),
+    updatedAt: z.date(),
+  }),
 });
 export type ReservationOut = z.infer<typeof ReservationOutSchema>;

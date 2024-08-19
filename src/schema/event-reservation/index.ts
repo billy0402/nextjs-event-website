@@ -1,9 +1,27 @@
-import type { z } from 'zod';
+import { Role } from '@prisma/client';
+import { z } from 'zod';
 
-import { EventOutSchema } from '@/schema/event';
-import { ReservationOutSchema } from '@/schema/reservation';
-
-export const EventReservationOutSchema = EventOutSchema.extend({
-  reservations: ReservationOutSchema.omit({ event: true }).array(),
+export const EventReservationOutSchema = z.object({
+  id: z.string().min(1),
+  title: z.string().min(1),
+  description: z.string().nullish().default(null),
+  date: z.date(),
+  location: z.string().nullish().default(null),
+  isActive: z.boolean(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  reservations: z
+    .object({
+      id: z.string().min(1),
+      user: z.object({
+        id: z.string().min(1),
+        email: z.string().min(1).email(),
+        name: z.string().min(1),
+        role: z.nativeEnum(Role),
+        createdAt: z.date(),
+        updatedAt: z.date(),
+      }),
+    })
+    .array(),
 });
 export type EventReservationOut = z.infer<typeof EventReservationOutSchema>;

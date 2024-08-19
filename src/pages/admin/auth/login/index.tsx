@@ -2,10 +2,8 @@ import type { NextPage } from 'next';
 
 import { useRouter } from 'next/router';
 
-import { Button, Center, Heading, useToast } from '@chakra-ui/react';
+import { Button, Center, Heading } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-
-import { Role } from '@prisma/client';
 
 import type { FieldConfig } from '@/components/Field';
 import Field from '@/components/Field';
@@ -27,20 +25,8 @@ const fieldConfigs: FieldConfig[] = [
 ];
 
 const AdminLoginPage: NextPage = () => {
-  const toast = useToast();
   const router = useRouter();
-  const login = useAdminAuthLogin((tokenData) => {
-    if (tokenData?.role !== Role.ADMIN) {
-      toast({
-        status: 'error',
-        title: 'Permission Denied',
-        description: 'Please use admin account to login',
-      });
-      return;
-    }
-
-    router.push('/admin');
-  });
+  const login = useAdminAuthLogin(() => router.push('/admin'));
 
   const {
     register,

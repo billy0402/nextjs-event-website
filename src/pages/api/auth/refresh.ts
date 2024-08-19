@@ -6,13 +6,8 @@ import env from '@/fixtures/env';
 import { validationGuard } from '@/helpers/api-guard';
 import { withServerError } from '@/helpers/handler-wrapper';
 import type { ApiError } from '@/models/error';
-import type { TokenData, TokenPayload } from '@/schema/auth';
-import {
-  RefreshInSchema,
-  TokenDataSchema,
-  TokenPayloadSchema,
-  TokenUserDataSchema,
-} from '@/schema/auth';
+import type { TokenPayload } from '@/schema/auth';
+import { RefreshInSchema, TokenPayloadSchema } from '@/schema/auth';
 
 async function handler(
   req: NextApiRequest,
@@ -24,32 +19,31 @@ async function handler(
       if (!data) return undefined;
       const { refreshToken } = data;
 
-      let tokenData: TokenData;
+      let tokenData: jwt.JwtPayload;
       try {
-        tokenData = jwt.verify(refreshToken, env.REFRESH_TOKEN_SECRET) as any;
-        tokenData = TokenDataSchema.parse(tokenData);
+        tokenData = jwt.verify(
+          refreshToken,
+          env.REFRESH_TOKEN_SECRET,
+        ) as jwt.JwtPayload;
       } catch (error) {
         return res.status(401).json({ message: 'Invalid refresh token' });
       }
 
-      if (new Date(tokenData.exp * 1000) < new Date()) {
+      if (tokenData.exp && new Date(tokenData.exp * 1000) < new Date()) {
         return res
           .status(401)
           .json({ message: 'Invalid or expired refresh token' });
       }
 
-      const tokenUserData = TokenUserDataSchema.parse(tokenData);
       const newAccessToken = jwt.sign(
-        tokenUserData,
+        { userId: tokenData.userId },
         env.ACCESS_TOKEN_SECRET as string,
         { expiresIn: env.ACCESS_TOKEN_LIFETIME },
       );
       const newRefreshToken = jwt.sign(
-        tokenUserData,
+        { userId: tokenData.userId },
         env.REFRESH_TOKEN_SECRET,
-        {
-          expiresIn: env.REFRESH_TOKEN_LIFETIME,
-        },
+        { expiresIn: env.REFRESH_TOKEN_LIFETIME },
       );
 
       const response = TokenPayloadSchema.parse({
