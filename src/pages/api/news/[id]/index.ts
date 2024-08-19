@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+import { Role } from '@prisma/client';
+
 import prisma from '@/db';
 import { roleGuard, validationGuard } from '@/helpers/api-guard';
 import withServerError from '@/helpers/error-handler';
@@ -29,7 +31,7 @@ async function handler(
     }
     case 'PUT':
     case 'PATCH': {
-      if (!roleGuard('ADMIN', req, res)) return undefined;
+      if (!roleGuard(Role.ADMIN, req, res)) return undefined;
 
       const schema =
         req.method === 'PUT' ? NewsInSchema : NewsInSchema.partial();
@@ -49,7 +51,7 @@ async function handler(
       return res.status(200).json(response);
     }
     case 'DELETE': {
-      if (!roleGuard('ADMIN', req, res)) return undefined;
+      if (!roleGuard(Role.ADMIN, req, res)) return undefined;
 
       const news = await prisma.news.findUnique({ where: { id } });
       if (!news) {

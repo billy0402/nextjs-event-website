@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+import { Role } from '@prisma/client';
+
 import prisma from '@/db';
 import { roleGuard, validationGuard } from '@/helpers/api-guard';
 import withServerError from '@/helpers/error-handler';
@@ -18,7 +20,7 @@ async function handler(
       return res.status(200).json(response);
     }
     case 'POST': {
-      if (!roleGuard('ADMIN', req, res)) return undefined;
+      if (!roleGuard(Role.ADMIN, req, res)) return undefined;
 
       const data = validationGuard(NewsInSchema, req, res);
       if (!data) return undefined;
