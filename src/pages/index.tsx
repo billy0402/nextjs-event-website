@@ -81,6 +81,8 @@ const HomePage: NextPage = () => {
                 gap={2}
                 shadow='md'
               >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                {news.image && <img src={news.image} alt={news.title} />}
                 <Heading as='h3' size='md'>
                   {news.title}
                 </Heading>
