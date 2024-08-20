@@ -9,6 +9,33 @@ import {
 import { queryClient } from '@/queries/client';
 import { type TokenPayload } from '@/schema/auth';
 
+// Public
+export function getToken() {
+  return getLocalStorage<TokenPayload | undefined>(
+    LocalStorageKey.PUBLIC_TOKEN,
+  );
+}
+
+export function decodeToken(type: 'accessToken' | 'refreshToken') {
+  const token = getToken();
+  if (!token) return undefined;
+  return jwt.decode(token[type]) as jwt.JwtPayload;
+}
+
+export function setToken(value: TokenPayload) {
+  setLocalStorage<TokenPayload>(LocalStorageKey.PUBLIC_TOKEN, value);
+}
+
+export function removeToken() {
+  removeLocalStorage(LocalStorageKey.PUBLIC_TOKEN);
+  queryClient.clear();
+}
+
+export function hasToken() {
+  return !!getToken();
+}
+
+// Admin
 export function getAdminToken() {
   return getLocalStorage<TokenPayload | undefined>(LocalStorageKey.ADMIN_TOKEN);
 }

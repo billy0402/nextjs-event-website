@@ -2,12 +2,13 @@ import type { NextPage } from 'next';
 
 import { useRouter } from 'next/router';
 
-import { Button, Center, Heading } from '@chakra-ui/react';
+import { Button, Center, Flex, Heading } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 
 import type { FieldConfig } from '@/components/Field';
 import Field from '@/components/Field';
-import { useAdminAuthLogin } from '@/queries/admin/auth';
+import { useAuthLogin } from '@/queries/public/auth';
+import { Link } from '@chakra-ui/next-js';
 
 const fieldConfigs: FieldConfig[] = [
   {
@@ -26,9 +27,7 @@ const fieldConfigs: FieldConfig[] = [
 
 const LoginPage: NextPage = () => {
   const router = useRouter();
-  const login = useAdminAuthLogin(() => {
-    router.push('/');
-  });
+  const login = useAuthLogin(() => router.push('/'));
 
   const {
     register,
@@ -62,9 +61,12 @@ const LoginPage: NextPage = () => {
           register={register}
         />
       ))}
-      <Button colorScheme='blue' mt={5} type='submit' w='100px'>
-        登入
-      </Button>
+      <Flex mt={5} alignItems='center' gap={5}>
+        <Button colorScheme='blue' type='submit' w='100px'>
+          登入
+        </Button>
+        <Link href='/'>回到首頁</Link>
+      </Flex>
     </Center>
   );
 };

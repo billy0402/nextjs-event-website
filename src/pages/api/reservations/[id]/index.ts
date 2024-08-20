@@ -32,6 +32,20 @@ async function handler(
       const response = ReservationOutSchema.parse(reservation);
       return res.status(200).json(response);
     }
+    case 'DELETE': {
+      const tokenData = authGuard(req, res);
+      if (!tokenData) return;
+
+      const reservation = await prisma.reservation.findUnique({
+        where: { id, userId: tokenData.userId },
+      });
+      if (!reservation) {
+        return res.status(404).json({ message: 'Reservation not found' });
+      }
+
+      await prisma.reservation.delete({ where: { id } });
+      return res.status(204).end();
+    }
     default:
       res.setHeader('Allow', ['GET']);
       return res.status(405).end(`Method ${req.method} Not Allowed`);
