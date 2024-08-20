@@ -7,15 +7,12 @@ export function getLocalStorage<T>(key: LocalStorageKey): T {
 }
 
 export function setLocalStorage<T>(key: LocalStorageKey, data: T) {
-  const oldValue = localStorage.getItem(key);
   const newValue = JSON.stringify(data);
-
   localStorage.setItem(key, newValue);
-
-  const event = new StorageEvent('storage', { key, oldValue, newValue });
-  dispatchEvent(event);
+  dispatchEvent(new StorageEvent('storage'));
 }
 
 export function removeLocalStorage(key: LocalStorageKey) {
-  return localStorage.removeItem(key);
+  localStorage.removeItem(key);
+  dispatchEvent(new StorageEvent('storage'));
 }

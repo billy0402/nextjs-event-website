@@ -1,3 +1,5 @@
+import type { AxiosRequestConfig } from 'axios';
+
 import type {
   LoginIn,
   RefreshIn,
@@ -12,10 +14,14 @@ export async function apiAdminAuthLogin(data: LoginIn) {
   return response.data;
 }
 
-export async function apiAdminAuthRefresh(data: RefreshIn) {
+export async function apiAdminAuthRefresh(
+  data: RefreshIn,
+  config?: AxiosRequestConfig,
+) {
   const response = await instance.post<TokenPayload>(
     '/admin/auth/refresh',
     data,
+    config,
   );
   return response.data;
 }

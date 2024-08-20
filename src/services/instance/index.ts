@@ -26,16 +26,17 @@ instance.interceptors.response.use(
     const originalRequest = error.config;
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
+
       try {
         const token = getToken();
         if (!token) return await Promise.reject(error);
 
-        const newToken = await apiAdminAuthRefresh({
-          refreshToken: token.refreshToken,
-        });
+        const newToken = await apiAdminAuthRefresh(
+          { refreshToken: token.refreshToken },
+          error.config,
+        );
         setToken(newToken);
 
-        instance.defaults.headers.common.Authorization = `Bearer ${newToken.accessToken}`;
         return await instance(originalRequest);
       } catch (refreshError) {
         removeToken();
