@@ -23,11 +23,8 @@ async function handler(
       const response = NewsOutSchema.parse(news);
       return res.status(200).json(response);
     }
-    case 'PUT':
-    case 'PATCH': {
-      const Schema =
-        req.method === 'PUT' ? NewsInSchema : NewsInSchema.partial();
-      const data = validationGuard(Schema, req, res);
+    case 'PUT': {
+      const data = validationGuard(NewsInSchema, req, res);
       if (!data) return;
 
       const news = await prisma.news.findUnique({ where: { id } });

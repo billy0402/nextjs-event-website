@@ -23,11 +23,8 @@ async function handler(
       const response = EventOutSchema.parse(event);
       return res.status(200).json(response);
     }
-    case 'PUT':
-    case 'PATCH': {
-      const Schema =
-        req.method === 'PUT' ? EventInSchema : EventInSchema.partial();
-      const data = validationGuard(Schema, req, res);
+    case 'PUT': {
+      const data = validationGuard(EventInSchema, req, res);
       if (!data) return;
 
       const event = await prisma.event.findUnique({ where: { id } });
