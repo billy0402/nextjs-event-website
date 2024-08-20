@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { ApiModule } from '@/enums/api-module';
-import { getToken, setToken } from '@/helpers/token';
+import { getAdminToken, setAdminToken } from '@/helpers/token';
 import { queryClient } from '@/queries/client';
 import {
   apiAdminAuthLogin,
@@ -20,7 +20,7 @@ export const useAdminAuthLogin = (onSuccess: () => void) => {
   return useMutation({
     mutationFn: apiAdminAuthLogin,
     onSuccess: (data) => {
-      setToken(data);
+      setAdminToken(data);
       onSuccess();
     },
   });
@@ -30,8 +30,8 @@ export const useAdminAuthRefresh = () => {
   return useMutation({
     mutationFn: apiAdminAuthRefresh,
     onSuccess: (data) => {
-      const token = getToken();
-      setToken({ ...token, ...data });
+      const token = getAdminToken();
+      setAdminToken({ ...token, ...data });
     },
   });
 };
@@ -40,7 +40,7 @@ export const useAdminAuthMe = () => {
   return useQuery({
     queryKey: queryKeys.user(),
     queryFn: apiAdminAuthMe,
-    enabled: !!getToken(),
+    enabled: !!getAdminToken(),
   });
 };
 

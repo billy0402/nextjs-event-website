@@ -1,7 +1,11 @@
 import axios from 'axios';
 
 import { BASE_API_URL } from '@/fixtures/constants';
-import { getToken, removeToken, setToken } from '@/helpers/token';
+import {
+  getAdminToken,
+  removeAdminToken,
+  setAdminToken,
+} from '@/helpers/token';
 import { apiAdminAuthRefresh } from '@/services/admin/auth';
 
 const instance = axios.create({
@@ -10,7 +14,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   (config) => {
-    const token = getToken();
+    const token = getAdminToken();
     if (token) {
       config.headers!.Authorization = `Bearer ${token.accessToken}`;
     }
@@ -28,18 +32,18 @@ instance.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const token = getToken();
+        const token = getAdminToken();
         if (!token) return await Promise.reject(error);
 
         const newToken = await apiAdminAuthRefresh(
           { refreshToken: token.refreshToken },
           error.config,
         );
-        setToken(newToken);
+        setAdminToken(newToken);
 
         return await instance(originalRequest);
       } catch (refreshError) {
-        removeToken();
+        removeAdminToken();
         return Promise.reject(refreshError);
       }
     }

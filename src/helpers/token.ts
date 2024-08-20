@@ -9,33 +9,25 @@ import {
 import { queryClient } from '@/queries/client';
 import { type TokenPayload } from '@/schema/auth';
 
-export function getToken() {
+export function getAdminToken() {
   return getLocalStorage<TokenPayload | undefined>(LocalStorageKey.ADMIN_TOKEN);
 }
 
-export function getTokenData(type: 'accessToken' | 'refreshToken') {
-  const token = getToken();
+export function decodeAdminToken(type: 'accessToken' | 'refreshToken') {
+  const token = getAdminToken();
   if (!token) return undefined;
-  let tokenData = jwt.decode(token[type]) as jwt.JwtPayload;
-  return tokenData;
+  return jwt.decode(token[type]) as jwt.JwtPayload;
 }
 
-export function setToken(value: TokenPayload) {
+export function setAdminToken(value: TokenPayload) {
   setLocalStorage<TokenPayload>(LocalStorageKey.ADMIN_TOKEN, value);
 }
 
-export function removeToken() {
+export function removeAdminToken() {
   removeLocalStorage(LocalStorageKey.ADMIN_TOKEN);
   queryClient.clear();
 }
 
-export function hasToken() {
-  return !!getToken();
-}
-
-export function decodeToken() {
-  const token = getToken();
-  if (!token) return undefined;
-
-  return jwt.decode(token.accessToken) as jwt.JwtPayload;
+export function hasAdminToken() {
+  return !!getAdminToken();
 }

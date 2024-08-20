@@ -1,6 +1,6 @@
 import { Box, useColorModeValue } from '@chakra-ui/react';
 
-import useAuth from '@/hooks/useAuth';
+import useAuth from '@/hooks/useAdminAuth';
 
 import Header from './Header';
 import Sidebar from './Sidebar';

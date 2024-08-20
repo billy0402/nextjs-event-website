@@ -12,7 +12,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 
-import { removeToken } from '@/helpers/token';
+import { removeAdminToken } from '@/helpers/token';
 import { useAdminAuthMe } from '@/queries/admin/auth';
 
 const Navbar = () => {
@@ -20,7 +20,7 @@ const Navbar = () => {
   const { data: meData } = useAdminAuthMe();
 
   const logout = () => {
-    removeToken();
+    removeAdminToken();
     router.push('/admin/auth/login');
   };
 
